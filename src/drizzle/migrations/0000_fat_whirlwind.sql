@@ -8,23 +8,23 @@ CREATE TABLE IF NOT EXISTS "schedules" (
 	"movie_id" integer,
 	"status" "movie_status" DEFAULT 'not_aired' NOT NULL,
 	"start_time" timestamp NOT NULL,
+	"end_time" timestamp NOT NULL,
 	"available_seats" integer DEFAULT 300 NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "movies" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" varchar NOT NULL,
-	"duartion" integer NOT NULL,
+	"duration" integer NOT NULL,
 	"genre" varchar NOT NULL,
 	"poster" varchar NOT NULL,
-	"phone_number" varchar(20),
 	"trailer" varchar NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "reservations" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" integer NOT NULL,
-	"movie_schedule_id" integer NOT NULL,
+	"movie_id" integer NOT NULL,
 	"seat_id" integer NOT NULL,
 	"status" "reservation_status" DEFAULT 'pending' NOT NULL,
 	"total_amount" numeric(10, 2) NOT NULL,
@@ -58,36 +58,37 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"name" varchar(255) NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"role" "user_role" DEFAULT 'user' NOT NULL,
+	"phone_number" varchar(20),
 	"password" varchar(12) NOT NULL,
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "schedules" ADD CONSTRAINT "schedules_movie_id_movies_id_fk" FOREIGN KEY ("movie_id") REFERENCES "public"."movies"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "schedules" ADD CONSTRAINT "schedules_movie_id_movies_id_fk" FOREIGN KEY ("movie_id") REFERENCES "public"."movies"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "reservations" ADD CONSTRAINT "reservations_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "reservations" ADD CONSTRAINT "reservations_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "reservations" ADD CONSTRAINT "reservations_movie_schedule_id_schedules_id_fk" FOREIGN KEY ("movie_schedule_id") REFERENCES "public"."schedules"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "reservations" ADD CONSTRAINT "reservations_movie_id_movies_id_fk" FOREIGN KEY ("movie_id") REFERENCES "public"."movies"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "reservations" ADD CONSTRAINT "reservations_seat_id_seats_id_fk" FOREIGN KEY ("seat_id") REFERENCES "public"."seats"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "reservations" ADD CONSTRAINT "reservations_seat_id_seats_id_fk" FOREIGN KEY ("seat_id") REFERENCES "public"."seats"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "tickets" ADD CONSTRAINT "tickets_reservation_id_reservations_id_fk" FOREIGN KEY ("reservation_id") REFERENCES "public"."reservations"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "tickets" ADD CONSTRAINT "tickets_reservation_id_reservations_id_fk" FOREIGN KEY ("reservation_id") REFERENCES "public"."reservations"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

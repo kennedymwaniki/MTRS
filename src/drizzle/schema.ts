@@ -9,6 +9,7 @@ import {
   boolean,
   decimal,
   text,
+  date,
 } from "drizzle-orm/pg-core";
 
 export const userRoleEnum = pgEnum("user_role", ["admin", "user"]);
@@ -40,25 +41,27 @@ export const users = pgTable("users", {
   name: varchar({ length: 255 }).notNull(),
   email: varchar({ length: 255 }).notNull().unique(),
   role: userRoleEnum("role").default("user").notNull(),
+  phoneNumber: varchar("phone_number", { length: 20 }),
   password: varchar({ length: 12 }).notNull(),
 });
 
 export const movies = pgTable("movies", {
   id: serial("id").primaryKey(),
-  tite: varchar("title").notNull(),
-  duration: integer("duartion").notNull(),
+  title: varchar("title").notNull(),
+  duration: integer("duration").notNull(),
   genre: varchar("genre").notNull(),
   poster: varchar("poster").notNull(),
-  phoneNumber: varchar("phone_number", { length: 20 }),
   trailer: varchar("trailer").notNull(),
 });
 
 export const movieSchedules = pgTable("schedules", {
   id: serial("id").primaryKey(),
-  movieId: integer("movie_id").references(() => movies.id),
+  movieId: integer("movie_id").references(() => movies.id, {
+    onDelete: "cascade",
+  }),
   status: movieStatusEnum("status").default("not_aired").notNull(),
   startTime: timestamp("start_time").notNull(),
-  endTime: timestamp("start_time").notNull(),
+  endTime: timestamp("end_time").notNull(),
   availableSeats: integer("available_seats").default(300).notNull(),
 });
 
@@ -75,13 +78,13 @@ export const seats = pgTable("seats", {
 export const reservations = pgTable("reservations", {
   id: serial("id").primaryKey(),
   userId: integer("user_id")
-    .references(() => users.id)
+    .references(() => users.id, { onDelete: "cascade" })
     .notNull(),
-  movieScheduleId: integer("movie_schedule_id")
-    .references(() => movieSchedules.id)
+  movieId: integer("movie_id")
+    .references(() => movies.id, { onDelete: "cascade" })
     .notNull(),
   seatId: integer("seat_id")
-    .references(() => seats.id)
+    .references(() => seats.id, { onDelete: "cascade" })
     .notNull(),
   status: reservationStatusEnum("status").default("pending").notNull(),
   totalAmount: decimal("total_amount", { precision: 10, scale: 2 }).notNull(),
@@ -95,13 +98,32 @@ export const reservations = pgTable("reservations", {
 export const tickets = pgTable("tickets", {
   id: serial("id").primaryKey(),
   reservationId: integer("reservation_id")
-    .references(() => reservations.id)
+    .references(() => reservations.id, { onDelete: "cascade" })
     .notNull(),
   ticketNumber: varchar("ticket_number", { length: 50 }).notNull().unique(),
   qrCode: text("qr_code"),
   isUsed: boolean("is_used").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+//  types
+export type TSUsers = typeof users.$inferSelect;
+export type TIUsers = typeof users.$inferInsert;
+
+export type TSMovies = typeof movies.$inferSelect;
+export type TIMovies = typeof movies.$inferInsert;
+
+export type TSMovieSChedule = typeof movieSchedules.$inferSelect;
+export type TIMovieSchedule = typeof movies.$inferInsert;
+
+export type TISeats = typeof seats.$inferSelect;
+export type TSSeats = typeof seats.$inferSelect;
+
+export type TSReservation = typeof reservations.$inferSelect;
+export type TIReservation = typeof reservations.$inferInsert;
+
+export type TITickets = typeof tickets.$inferInsert;
+export type TSTickets = typeof tickets.$inferSelect;
 
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
@@ -110,6 +132,7 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 export const moviesRelations = relations(movies, ({ many }) => ({
   schedules: many(movieSchedules),
+  reservations: many(reservations),
 }));
 
 export const movieSchedulesRelations = relations(
@@ -132,9 +155,9 @@ export const reservationsRelations = relations(reservations, ({ one }) => ({
     fields: [reservations.userId],
     references: [users.id],
   }),
-  movieSchedule: one(movieSchedules, {
-    fields: [reservations.movieScheduleId],
-    references: [movieSchedules.id],
+  movie: one(movies, {
+    fields: [reservations.movieId],
+    references: [movies.id],
   }),
   seat: one(seats, {
     fields: [reservations.seatId],

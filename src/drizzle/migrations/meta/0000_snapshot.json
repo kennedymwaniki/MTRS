@@ -1,5 +1,5 @@
 {
-  "id": "1af6bfe3-3c01-449c-916b-a58723e60590",
+  "id": "9018eb4e-8981-4318-8cfb-f89022c44f5b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -34,6 +34,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "end_time": {
+          "name": "end_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
         "available_seats": {
           "name": "available_seats",
           "type": "integer",
@@ -54,7 +60,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -80,8 +86,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "duartion": {
-          "name": "duartion",
+        "duration": {
+          "name": "duration",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -97,12 +103,6 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
-        },
-        "phone_number": {
-          "name": "phone_number",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": false
         },
         "trailer": {
           "name": "trailer",
@@ -135,8 +135,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "movie_schedule_id": {
-          "name": "movie_schedule_id",
+        "movie_id": {
+          "name": "movie_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -189,20 +189,20 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "reservations_movie_schedule_id_schedules_id_fk": {
-          "name": "reservations_movie_schedule_id_schedules_id_fk",
+        "reservations_movie_id_movies_id_fk": {
+          "name": "reservations_movie_id_movies_id_fk",
           "tableFrom": "reservations",
-          "tableTo": "schedules",
+          "tableTo": "movies",
           "columnsFrom": [
-            "movie_schedule_id"
+            "movie_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "reservations_seat_id_seats_id_fk": {
@@ -215,7 +215,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -347,7 +347,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -405,6 +405,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'user'"
+        },
+        "phone_number": {
+          "name": "phone_number",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
         },
         "password": {
           "name": "password",
