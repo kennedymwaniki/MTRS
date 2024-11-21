@@ -42,7 +42,7 @@ export const users = pgTable("users", {
   email: varchar({ length: 255 }).notNull().unique(),
   role: userRoleEnum("role").default("user").notNull(),
   phoneNumber: varchar("phone_number", { length: 20 }),
-  password: varchar({ length: 12 }).notNull(),
+  password: varchar({ length: 100 }).notNull(),
 });
 
 export const movies = pgTable("movies", {

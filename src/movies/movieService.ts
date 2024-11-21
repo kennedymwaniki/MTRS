@@ -13,6 +13,15 @@ export const getMoviesService = async (): Promise<TSMovies[] | []> => {
           availableSeats: true,
         },
       },
+      reservations: {
+        columns: {
+          userId: true,
+          paymentStatus: true,
+          status: true,
+          createdAt: true,
+          totalAmount: true,
+        },
+      },
     },
   });
   return movies;
@@ -30,6 +39,15 @@ export const getMovieByIdService = async (
           endTime: true,
           status: true,
           availableSeats: true,
+        },
+      },
+      reservations: {
+        columns: {
+          userId: true,
+          paymentStatus: true,
+          status: true,
+          createdAt: true,
+          totalAmount: true,
         },
       },
     },
