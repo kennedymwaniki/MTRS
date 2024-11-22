@@ -7,6 +7,7 @@ export const getMoviesService = async (): Promise<TSMovies[] | []> => {
     with: {
       schedules: {
         columns: {
+          id: true,
           startTime: true,
           endTime: true,
           status: true,
@@ -35,6 +36,7 @@ export const getMovieByIdService = async (
     with: {
       schedules: {
         columns: {
+          id: true,
           startTime: true,
           endTime: true,
           status: true,
@@ -89,6 +91,7 @@ export const getMoviesSchedules = async (id: number) => {
           startTime: true,
           endTime: true,
           status: true,
+          id: true,
         },
       },
     },

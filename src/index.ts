@@ -4,6 +4,9 @@ import { userRouter } from "./users/userRoutes";
 import { cors } from "hono/cors";
 import { movieRouter } from "./movies/movieRouter";
 import { reservationRouter } from "./reservations/reservationRouter";
+import { ticketRouter } from "./tickets/ticketRouter";
+import { seatsRouter } from "./seats/seatsRouter";
+import { scheduleRouter } from "./movieSchedules/scheduleRouter";
 const app = new Hono();
 
 app.use(cors());
@@ -15,6 +18,9 @@ app.get("/", (c) => {
 app.route("/api", userRouter);
 app.route("/api", movieRouter);
 app.route("/api", reservationRouter);
+app.route("/api", ticketRouter);
+app.route("/api", seatsRouter);
+app.route("/api", scheduleRouter);
 
 const port = 9000;
 console.log(`Server is running on http://localhost:${port}`);

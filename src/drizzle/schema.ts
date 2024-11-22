@@ -60,8 +60,8 @@ export const movieSchedules = pgTable("schedules", {
     onDelete: "cascade",
   }),
   status: movieStatusEnum("status").default("not_aired").notNull(),
-  startTime: timestamp("start_time").notNull(),
-  endTime: timestamp("end_time").notNull(),
+  startTime: timestamp("start_time", { mode: "string" }).notNull(),
+  endTime: timestamp("end_time", { mode: "string" }).notNull(),
   availableSeats: integer("available_seats").default(300).notNull(),
 });
 
@@ -71,8 +71,8 @@ export const seats = pgTable("seats", {
   category: seatCategoryEnum("category").notNull(),
   price: integer("price").notNull(),
   isActive: boolean("is_active").default(true).notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "string" }).defaultNow().notNull(),
 });
 
 export const reservations = pgTable("reservations", {
@@ -103,7 +103,7 @@ export const tickets = pgTable("tickets", {
   ticketNumber: varchar("ticket_number", { length: 50 }).notNull().unique(),
   qrCode: text("qr_code"),
   isUsed: boolean("is_used").default(false).notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
+  createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
 });
 
 //  types
@@ -114,7 +114,7 @@ export type TSMovies = typeof movies.$inferSelect;
 export type TIMovies = typeof movies.$inferInsert;
 
 export type TSMovieSChedule = typeof movieSchedules.$inferSelect;
-export type TIMovieSchedule = typeof movies.$inferInsert;
+export type TIMovieSchedule = typeof movieSchedules.$inferInsert;
 
 export type TISeats = typeof seats.$inferSelect;
 export type TSSeats = typeof seats.$inferSelect;
