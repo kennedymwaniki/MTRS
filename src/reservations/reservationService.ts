@@ -84,6 +84,8 @@ export const getRerservationByIdService = async (
         columns: {
           seatNumber: true,
           category: true,
+          id: true,
+          isAvailable: true,
         },
       },
       ticket: {

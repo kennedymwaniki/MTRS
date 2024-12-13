@@ -15,6 +15,13 @@
       "when": 1732211200824,
       "tag": "0001_colorful_peter_quill",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1732264627057,
+      "tag": "0002_pale_siren",
+      "breakpoints": true
     }
   ]
 }

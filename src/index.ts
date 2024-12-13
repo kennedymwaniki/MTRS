@@ -7,6 +7,8 @@ import { reservationRouter } from "./reservations/reservationRouter";
 import { ticketRouter } from "./tickets/ticketRouter";
 import { seatsRouter } from "./seats/seatsRouter";
 import { scheduleRouter } from "./movieSchedules/scheduleRouter";
+import { createMany } from "drizzle-orm";
+
 const app = new Hono();
 
 app.use(cors());

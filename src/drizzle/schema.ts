@@ -70,7 +70,7 @@ export const seats = pgTable("seats", {
   seatNumber: varchar("seat_number", { length: 10 }).notNull().unique(),
   category: seatCategoryEnum("category").notNull(),
   price: integer("price").notNull(),
-  isActive: boolean("is_active").default(true).notNull(),
+  isAvailable: boolean("is_available").default(true).notNull(),
   createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "string" }).defaultNow().notNull(),
 });
