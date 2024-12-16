@@ -6,6 +6,7 @@ import {
   getReservationsService,
   updateReservationService,
 } from "./reservationService";
+import { getMovieStatus } from "../helpers/AllStatusChecks";
 
 export const getReservations = async (c: Context) => {
   const reservations = await getReservationsService();
@@ -26,6 +27,10 @@ export const getReservation = async (c: Context) => {
 export const createReservation = async (c: Context) => {
   try {
     const reservation = await c.req.json();
+    const status = await getMovieStatus(reservation.movieId);
+    if (status?.scheduleStatus?.status == "aired") {
+      return c.json({ msg: "Movie has already aired" }, 400);
+    }
     const createdReservation = await createReservationService(reservation);
     if (!createdReservation) {
       return c.text("Reservation could not be created", 404);
