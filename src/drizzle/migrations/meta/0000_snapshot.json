@@ -1,5 +1,5 @@
 {
-  "id": "08dabe97-2fe6-4b72-b1be-6356cfc1389d",
+  "id": "c5d796fd-0880-4036-a3bd-71449a9ce321",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -141,6 +141,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "schedule_id": {
+          "name": "schedule_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
         "seat_id": {
           "name": "seat_id",
           "type": "integer",
@@ -198,6 +204,19 @@
           "tableTo": "movies",
           "columnsFrom": [
             "movie_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "reservations_schedule_id_schedules_id_fk": {
+          "name": "reservations_schedule_id_schedules_id_fk",
+          "tableFrom": "reservations",
+          "tableTo": "schedules",
+          "columnsFrom": [
+            "schedule_id"
           ],
           "columnsTo": [
             "id"

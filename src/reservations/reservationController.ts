@@ -27,7 +27,8 @@ export const getReservation = async (c: Context) => {
 export const createReservation = async (c: Context) => {
   try {
     const reservation = await c.req.json();
-    const status = await getMovieStatus(reservation.movieId);
+    const id = Number(reservation.movieId);
+    const status = await getMovieStatus(id);
     if (status?.scheduleStatus?.status == "aired") {
       return c.json({ msg: "Movie has already aired" }, 400);
     }

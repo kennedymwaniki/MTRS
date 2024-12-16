@@ -83,6 +83,9 @@ export const reservations = pgTable("reservations", {
   movieId: integer("movie_id")
     .references(() => movies.id, { onDelete: "cascade" })
     .notNull(),
+  scheduleId: integer("schedule_id")
+    .references(() => movieSchedules.id, { onDelete: "cascade" })
+    .notNull(),
   seatId: integer("seat_id")
     .references(() => seats.id, { onDelete: "cascade" })
     .notNull(),
@@ -162,6 +165,10 @@ export const reservationsRelations = relations(reservations, ({ one }) => ({
   seat: one(seats, {
     fields: [reservations.seatId],
     references: [seats.id],
+  }),
+  schedule: one(movieSchedules, {
+    fields: [reservations.scheduleId],
+    references: [movieSchedules.id],
   }),
   ticket: one(tickets, {
     fields: [reservations.id],
