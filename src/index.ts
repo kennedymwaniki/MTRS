@@ -8,6 +8,7 @@ import { ticketRouter } from "./tickets/ticketRouter";
 import { seatsRouter } from "./seats/seatsRouter";
 import { scheduleRouter } from "./movieSchedules/scheduleRouter";
 import { createMany } from "drizzle-orm";
+import { authRouter } from "./auth/authRouter";
 
 const app = new Hono();
 
@@ -23,6 +24,7 @@ app.route("/api", reservationRouter);
 app.route("/api", ticketRouter);
 app.route("/api", seatsRouter);
 app.route("/api", scheduleRouter);
+app.route("/api/auth", authRouter);
 
 const port = 9000;
 console.log(`Server is running on http://localhost:${port}`);
